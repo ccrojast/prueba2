@@ -1,0 +1,26 @@
+
+services:
+  mongodb:
+    image: mongo:latest
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: mongoadmin
+      MONGO_INITDB_DATABASE: bezkoder_db
+    ports:
+      - 27027:27027
+
+  web:
+    build: .
+    restart: always
+    container_name: web
+    command: python product_rating/manage.py runserver 0.0.0.0:8000
+    volumes:
+      - ./src:/src
+      - ./static:/static
+    expose:
+      - 4200
+    ports:
+      - 8000:8000
+    links:
+      - mongodb
